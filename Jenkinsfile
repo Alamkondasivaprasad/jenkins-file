@@ -1,59 +1,66 @@
-pipeline{
+pipeline {
     agent any
 
-    parameters{
+    parameters {
         string(
-            name:'APP_PORT',
-            defaultValue:'3000',
-            description:'Server Port'
+            name: 'APP_PORT',
+            defaultValue: '3000',
+            description: 'Server Port'
         )
     }
 
-    environment{
-        IMAGE_NAME='jenkins-demo-app'
+    environment {
+        IMAGE_NAME = 'jenkins-demo-app'
     }
 
-    stages{
-        stage('Checkout'){
-            steps{
+    stages {
+        stage('Checkout') {
+            steps {
                 echo 'Checking out Source Code From Git Repo'
                 checkout scm
             }
         }
-        stage('check Docker'){
-            steps{
-                bat 'docker --version'
+
+        stage('Check Docker') {
+            steps {
+                // Use full path to docker.exe if PATH is not set
+                bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" --version'
             }
         }
-        stage('Dependencies'){
-            steps{
+
+        stage('Dependencies') {
+            steps {
                 bat 'npm install'
             }
         }
-        stage('Test APP'){
-            steps{
+
+        stage('Test APP') {
+            steps {
                 bat 'npm test'
             }
         }
-        stage('Build'){
-            steps{
-                bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
+
+        stage('Build') {
+            steps {
+                bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
             }
         }
-        stage('Run Container'){
-            steps{
-                bat '''
-                    docker run -d --name node-app-%BUILD_NUMBER% -p %APP_PORT%:3000 %IMAGE_NAME%:%BUILD_NUMBER%
-                '''
+
+        stage('Run Container') {
+            steps {
+                bat """
+                    "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" run -d --name node-app-%BUILD_NUMBER% -p %APP_PORT%:3000 %IMAGE_NAME%:%BUILD_NUMBER%
+                """
             }
         }
-        stage('Verify'){
-            steps{
-                bat '''
+
+        stage('Verify') {
+            steps {
+                bat """
                     echo App Deployed Successfully
                     echo Open http://localhost:%APP_PORT%
-                    docker ps
-                '''
+                    "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" ps
+                """
             }
         }
     }
