@@ -1,14 +1,13 @@
-const express=require("express");
+const express = require("express");
 
-const app=express();
+const app = express();
 
-const PORT=3000;
+const PORT = 3000;
 
-app.ger("/",(req,res)=>{
+app.get("/", (req, res) => {
     res.send("APP is Working Fine");
-})
+});
 
-
-app.listen(PORT,"0.0.0.0",()=>{
-    console.log('SERVER is UP and Running...!')
-})
+app.listen(PORT, "0.0.0.0", () => {
+    console.log("SERVER is UP and Running...!");
+});
