@@ -16,14 +16,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out Source Code From Git Repo'
+                echo 'Checking out source code from Git repo'
                 checkout scm
             }
         }
 
         stage('Check Docker') {
             steps {
-                bat '"C:\\Users\\Administrator\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" --version'
+                bat 'docker --version'
             }
         }
 
@@ -33,7 +33,7 @@ pipeline {
             }
         }
 
-        stage('Test APP') {
+        stage('Test App') {
             steps {
                 bat 'npm test'
             }
@@ -41,25 +41,25 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat '"C:\\Users\\Administrator\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
+                bat 'docker build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
             }
         }
 
         stage('Run Container') {
             steps {
-                bat """
-                    "C:\\Users\\Administrator\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" run -d --name node-app-%BUILD_NUMBER% -p %APP_PORT%:3000 %IMAGE_NAME%:%BUILD_NUMBER%
-                """
+                bat '''
+                    docker run -d --name node-app-%BUILD_NUMBER% -p %APP_PORT%:3000 %IMAGE_NAME%:%BUILD_NUMBER%
+                '''
             }
         }
 
         stage('Verify') {
             steps {
-                bat """
+                bat '''
                     echo App Deployed Successfully
                     echo Open http://localhost:%APP_PORT%
-                    "C:\\Users\\Administrator\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" ps
-                """
+                    docker ps
+                '''
             }
         }
     }
