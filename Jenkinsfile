@@ -23,8 +23,7 @@ pipeline {
 
         stage('Check Docker') {
             steps {
-                // Use full path to docker.exe if PATH is not set
-                bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" --version'
+                bat '"C:\\Users\\Administrator\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" --version'
             }
         }
 
@@ -42,14 +41,14 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
+                bat '"C:\\Users\\Administrator\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t %IMAGE_NAME%:%BUILD_NUMBER% .'
             }
         }
 
         stage('Run Container') {
             steps {
                 bat """
-                    "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" run -d --name node-app-%BUILD_NUMBER% -p %APP_PORT%:3000 %IMAGE_NAME%:%BUILD_NUMBER%
+                    "C:\\Users\\Administrator\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" run -d --name node-app-%BUILD_NUMBER% -p %APP_PORT%:3000 %IMAGE_NAME%:%BUILD_NUMBER%
                 """
             }
         }
@@ -59,7 +58,7 @@ pipeline {
                 bat """
                     echo App Deployed Successfully
                     echo Open http://localhost:%APP_PORT%
-                    "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" ps
+                    "C:\\Users\\Administrator\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" ps
                 """
             }
         }
